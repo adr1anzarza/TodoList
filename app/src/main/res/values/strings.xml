@@ -11,4 +11,9 @@
     <string name="hello_second_fragment">Hello second fragment. Arg: %1$s</string>
     <string name="cerrar_sesion">Cerrar sesión</string>
     <string name="limpiar">Limpiar</string>
+    <string name="que_tarea">¿Qué tarea vas a gregar?</string>
+    <string name="de_que">¿De que se trata?</string>
+    <string name="titulo">Título</string>
+    <string name="descripcion">Descripción</string>
+    <string name="agregar">Agregar</string>
 </resources>
