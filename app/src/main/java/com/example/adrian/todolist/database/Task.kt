@@ -10,7 +10,7 @@ data class Task  (
     var taskId: Long = 0L,
 
     @ColumnInfo(name = "title_task")
-    val titleTask: String,
+    var titleTask: String,
 
     @ColumnInfo(name = "description_task")
     var descriptionTask: String

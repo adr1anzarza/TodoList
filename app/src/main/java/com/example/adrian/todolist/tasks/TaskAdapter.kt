@@ -52,7 +52,7 @@ class TaskAdapter(val clickListener: TaskListener) : ListAdapter<Task, TaskAdapt
         }
     }
 
-    class TaskListener(val clickListener: (sleepId: Long) -> Unit) {
+    class TaskListener(val clickListener: (taskId: Long) -> Unit) {
         fun onClick(task: Task) = clickListener(task.taskId)
     }
 

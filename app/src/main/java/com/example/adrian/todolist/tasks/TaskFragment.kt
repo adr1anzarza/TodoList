@@ -6,6 +6,7 @@ import androidx.fragment.app.Fragment
 import androidx.databinding.DataBindingUtil
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProviders
+import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.example.adrian.todolist.R
 import com.example.adrian.todolist.database.TaskDatabase
@@ -59,6 +60,14 @@ class TaskFragment : Fragment() {
         taskViewModel.tasks.observe(viewLifecycleOwner, Observer { taskList ->
             taskList?.let {
                 adapter.submitList(taskList)
+            }
+        })
+
+        taskViewModel.navigateToTaskDetail.observe(viewLifecycleOwner, Observer { night ->
+            night?.let {
+                this.findNavController().navigate(TaskFragmentDirections
+                    .actionTaskFragmentToTaskDetailFragment(night))
+                taskViewModel.onSleepDataQualityNavigated()
             }
         })
 

@@ -32,7 +32,7 @@ class TaskViewModel(val database: TaskDatabaseDAO,
     val showSnackBarEvent: LiveData<Boolean> = _showSnackbarEvent
 
     private val _navigateToTaskDetail = MutableLiveData<Long>()
-    val navigateToSleepDataQuality= _navigateToTaskDetail
+    val navigateToTaskDetail= _navigateToTaskDetail
 
 
     init {
@@ -41,6 +41,10 @@ class TaskViewModel(val database: TaskDatabaseDAO,
 
     fun onTaskClicked(id: Long){
         _navigateToTaskDetail.value = id
+    }
+
+    fun onSleepDataQualityNavigated() {
+        _navigateToTaskDetail.value = null
     }
 
     private fun initializeLastTask() {
@@ -58,10 +62,12 @@ class TaskViewModel(val database: TaskDatabaseDAO,
 
     fun onStartTask() {
         uiScope.launch {
-            val newTask = Task(0L, "mI TITULO", "aDRIAN")
+            val newTask = Task(0L, "Nuevo título", "Descripción")
             insert(newTask)
             lastTask.value = getLastTaskFromDB()
+            onTaskClicked(newTask.taskId)
         }
+
     }
 
     suspend fun insert(night: Task){
