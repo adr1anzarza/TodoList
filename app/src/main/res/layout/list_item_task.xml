@@ -24,7 +24,8 @@
         android:layout_margin="8dp"
         android:padding="8dp"
         app:cardCornerRadius="4dp"
-        app:cardElevation="2dp">
+        app:cardElevation="2dp"
+        android:onClick="@{() -> clickListener.onClick(task)}">
 
         <androidx.constraintlayout.widget.ConstraintLayout
             android:layout_width="match_parent"

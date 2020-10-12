@@ -63,11 +63,11 @@ class TaskFragment : Fragment() {
             }
         })
 
-        taskViewModel.navigateToTaskDetail.observe(viewLifecycleOwner, Observer { night ->
-            night?.let {
+        taskViewModel.navigateToTaskDetail.observe(viewLifecycleOwner, Observer { taskId ->
+            taskId?.let {
                 this.findNavController().navigate(TaskFragmentDirections
-                    .actionTaskFragmentToTaskDetailFragment(night))
-                taskViewModel.onSleepDataQualityNavigated()
+                    .actionTaskFragmentToTaskDetailFragment(taskId))
+                taskViewModel.onTaskDetailNavigated()
             }
         })
 

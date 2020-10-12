@@ -35,7 +35,7 @@ class TaskDetailViewModel(
 
     init {
         task = database.getTaskWithId(taskKey)
-        title.value = "task.value?.titleTask"
+        title.value = task.value?.titleTask
     }
 
     override fun onCleared() {

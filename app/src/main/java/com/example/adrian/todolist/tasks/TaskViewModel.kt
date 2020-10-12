@@ -1,7 +1,6 @@
 package com.example.adrian.todolist.tasks
 
 import android.app.Application
-import android.util.Log
 import androidx.lifecycle.AndroidViewModel
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
@@ -39,11 +38,11 @@ class TaskViewModel(val database: TaskDatabaseDAO,
         initializeLastTask()
     }
 
-    fun onTaskClicked(id: Long){
-        _navigateToTaskDetail.value = id
+    fun onTaskClicked(taskId: Long){
+        _navigateToTaskDetail.value = taskId
     }
 
-    fun onSleepDataQualityNavigated() {
+    fun onTaskDetailNavigated() {
         _navigateToTaskDetail.value = null
     }
 
@@ -62,7 +61,7 @@ class TaskViewModel(val database: TaskDatabaseDAO,
 
     fun onStartTask() {
         uiScope.launch {
-            val newTask = Task(0L, "Nuevo título", "Descripción")
+            val newTask = Task("Titulo tarea", "Nueva descripción")
             insert(newTask)
             lastTask.value = getLastTaskFromDB()
             onTaskClicked(newTask.taskId)
