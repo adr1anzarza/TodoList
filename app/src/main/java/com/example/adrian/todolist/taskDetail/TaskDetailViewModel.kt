@@ -1,11 +1,8 @@
 package com.example.adrian.todolist.taskDetail
 
-import android.text.Editable
 import androidx.databinding.Bindable
 import androidx.databinding.Observable
-import androidx.databinding.ObservableField
 import androidx.lifecycle.LiveData
-import androidx.lifecycle.MediatorLiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import com.example.adrian.todolist.database.Task
@@ -27,6 +24,10 @@ class TaskDetailViewModel(
     var lastTask = MutableLiveData<Task?>()
 
     var title = MutableLiveData<String>()
+
+    private val _navigateToTaskFragment =  MutableLiveData<Boolean?>()
+
+    val navigateToTaskFragment: LiveData<Boolean?> = _navigateToTaskFragment
 
     @Bindable var taskTitleWord : String? = title.value
         set(value) {
@@ -65,16 +66,6 @@ class TaskDetailViewModel(
         }
     }
 
-    override fun onCleared() {
-        super.onCleared()
-
-        viewModelJob.cancel()
-    }
-
-    private val _navigateToTaskFragment =  MutableLiveData<Boolean?>()
-
-    val navigateToTaskFragment: LiveData<Boolean?> = _navigateToTaskFragment
-
     fun doneNavigating() {
         _navigateToTaskFragment.value = null
     }
@@ -98,8 +89,20 @@ class TaskDetailViewModel(
         }
     }
 
+    fun onClearItem() {
+        uiScope.launch {
+            clearTaskWithId()
+            lastTask.value = null
+        }
+        //_showSnackbarEvent.value = true
+        _navigateToTaskFragment.value = true
+    }
 
-
+    private suspend fun clearTaskWithId() {
+        withContext(Dispatchers.IO) {
+            database.deleteWithId(taskKey)
+        }
+    }
 
     override fun addOnPropertyChangedCallback(
         callback: Observable.OnPropertyChangedCallback) {
@@ -109,5 +112,11 @@ class TaskDetailViewModel(
     override fun removeOnPropertyChangedCallback(
         callback: Observable.OnPropertyChangedCallback) {
         //callbacks.remove(callback)
+    }
+
+    override fun onCleared() {
+        super.onCleared()
+
+        viewModelJob.cancel()
     }
 }

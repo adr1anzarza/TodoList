@@ -1,11 +1,8 @@
 package com.example.adrian.todolist.taskDetail
 
 import android.os.Bundle
+import android.view.*
 import androidx.fragment.app.Fragment
-import android.view.LayoutInflater
-import android.view.View
-import android.view.ViewGroup
-import android.widget.Button
 import androidx.databinding.DataBindingUtil
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProviders
@@ -15,6 +12,8 @@ import com.example.adrian.todolist.database.TaskDatabase
 import com.example.adrian.todolist.databinding.FragmentDetailTaskBinding
 
 class TaskDetailFragment : Fragment() {
+
+    lateinit var taskDetailViewModel: TaskDetailViewModel
 
     override fun onCreateView(
             inflater: LayoutInflater, container: ViewGroup?,
@@ -33,22 +32,24 @@ class TaskDetailFragment : Fragment() {
         val viewModelFactory = TaskDetailViewModelFactory(arguments.taskKey, dataSource)
 
         // Get a reference to the ViewModel associated with this fragment.
-        val sleepDetailViewModel = ViewModelProviders.of(this, viewModelFactory).get(TaskDetailViewModel::class.java)
+        taskDetailViewModel = ViewModelProviders.of(this, viewModelFactory).get(TaskDetailViewModel::class.java)
 
         // To use the View Model with data binding, you have to explicitly
         // give the binding object a reference to it.
-        binding.viewModel = sleepDetailViewModel
+        binding.viewModel = taskDetailViewModel
 
         binding.lifecycleOwner = this
 
+        setHasOptionsMenu(true)
+
         // Add an Observer to the state variable for Navigating when a Quality icon is tapped.
-        sleepDetailViewModel.navigateToTaskFragment.observe(viewLifecycleOwner, Observer {
+        taskDetailViewModel.navigateToTaskFragment.observe(viewLifecycleOwner, Observer {
             if (it == true) { // Observed state is true.
                 this.findNavController().navigate(
                     TaskDetailFragmentDirections.actionTaskDetailToTaskFragment())
                 // Reset state to make sure we only navigate once, even if the device
                 // has a configuration change.
-                sleepDetailViewModel.doneNavigating()
+                taskDetailViewModel.doneNavigating()
             }
         })
 
@@ -56,9 +57,19 @@ class TaskDetailFragment : Fragment() {
         return binding.root
     }
 
-    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
-        super.onViewCreated(view, savedInstanceState)
-
-
+    override fun onCreateOptionsMenu(menu: Menu, inflater: MenuInflater) {
+        // Inflate the menu; this adds items to the action bar if it is present.
+        inflater.inflate(R.menu.menu_edit, menu)
     }
+
+    //TaskDetailViewModel.onClearItem()
+
+    override fun onOptionsItemSelected(item: MenuItem): Boolean {
+        when (item.itemId) {
+            R.id.action_settings -> taskDetailViewModel.onClearItem()
+            else -> super.onOptionsItemSelected(item)
+        }
+        return true
+    }
+
 }

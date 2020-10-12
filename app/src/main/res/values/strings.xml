@@ -16,4 +16,5 @@
     <string name="titulo">Título</string>
     <string name="descripcion">Descripción</string>
     <string name="agregar">Agregar</string>
+    <string name="eliminar">Eliminar</string>
 </resources>

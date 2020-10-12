@@ -30,4 +30,7 @@ interface TaskDatabaseDAO{
 
     @Query("SELECT * FROM todo_task_table WHERE taskId = :key")
     fun getTaskWithId(key: Long): LiveData<Task>
+
+    @Query("DELETE FROM todo_task_table WHERE taskId = :key")
+    fun deleteWithId(key: Long) : Int
 }
