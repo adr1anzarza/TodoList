@@ -14,9 +14,6 @@ import com.example.adrian.todolist.databinding.FragmentTaskBinding
 import com.google.android.material.floatingactionbutton.FloatingActionButton
 import com.google.android.material.snackbar.Snackbar
 
-/**
- * A simple [Fragment] subclass as the default destination in the navigation.
- */
 class TaskFragment : Fragment() {
 
     lateinit var taskViewModel: TaskViewModel
@@ -68,6 +65,17 @@ class TaskFragment : Fragment() {
                 this.findNavController().navigate(TaskFragmentDirections
                     .actionTaskFragmentToTaskDetailFragment(taskId))
                 taskViewModel.onTaskDetailNavigated()
+            }
+        })
+
+        taskViewModel.showSnackBarEvent.observe(viewLifecycleOwner, Observer {
+            if (it == true) { // Observed state is true.
+                Snackbar.make(
+                    requireActivity().findViewById(android.R.id.content),
+                    getString(R.string.list_empty),
+                    Snackbar.LENGTH_SHORT // How long to display the message.
+                ).show()
+                taskViewModel.doneShowingSnackbar()
             }
         })
 

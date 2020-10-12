@@ -46,6 +46,10 @@ class TaskViewModel(val database: TaskDatabaseDAO,
         _navigateToTaskDetail.value = null
     }
 
+    fun doneShowingSnackbar() {
+        _showSnackbarEvent.value = false
+    }
+
     private fun initializeLastTask() {
         uiScope.launch {
             lastTask.value = getLastTaskFromDB()

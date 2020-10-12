@@ -21,6 +21,6 @@
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
-        app:srcCompat="@drawable/ic_list_icon_foreground" />
+        app:srcCompat="@drawable/ic_assignment_icon_foreground" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>

@@ -29,6 +29,10 @@ class TaskDetailViewModel(
 
     val navigateToTaskFragment: LiveData<Boolean?> = _navigateToTaskFragment
 
+    private var _showSnackbarEvent = MutableLiveData<Boolean>()
+
+    val showSnackBarEvent: LiveData<Boolean> = _showSnackbarEvent
+
     @Bindable var taskTitleWord : String? = title.value
         set(value) {
             if (field != value) {
@@ -70,22 +74,35 @@ class TaskDetailViewModel(
         _navigateToTaskFragment.value = null
     }
 
+    fun doneShowingSnackbar() {
+        _showSnackbarEvent.value = false
+    }
+
     fun onUpdateTask() {
-        uiScope.launch {
-            withContext(Dispatchers.IO) {
-                if(database.get(taskKey)==null){
-                    val lastTask = lastTask
-                    lastTask.value?.titleTask = taskTitleWord.toString()
-                    lastTask.value?.descriptionTask = taskDescriptionWord.toString()
-                    database.update(lastTask.value!!)
-                } else {
-                    val lastTask = database.get(taskKey) ?: return@withContext
-                    lastTask.titleTask = taskTitleWord.toString()
-                    lastTask.descriptionTask = taskDescriptionWord.toString()
-                    database.update(lastTask)
+        if(taskTitleWord == null || taskDescriptionWord == null){
+            _showSnackbarEvent.value = true
+        } else {
+            uiScope.launch {
+                withContext(Dispatchers.IO) {
+                    if (database.get(taskKey) == null) {
+                        val lastTask = lastTask
+
+                        lastTask.value?.titleTask = taskTitleWord.toString()
+                        lastTask.value?.descriptionTask = taskDescriptionWord.toString()
+                        database.update(lastTask.value!!)
+
+
+                    } else {
+                        val lastTask = database.get(taskKey) ?: return@withContext
+
+                        lastTask.titleTask = taskTitleWord.toString()
+                        lastTask.descriptionTask = taskDescriptionWord.toString()
+                        database.update(lastTask)
+
+                    }
                 }
+                _navigateToTaskFragment.value = true
             }
-            _navigateToTaskFragment.value = true
         }
     }
 

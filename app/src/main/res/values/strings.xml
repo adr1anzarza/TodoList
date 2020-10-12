@@ -17,4 +17,6 @@
     <string name="descripcion">Descripción</string>
     <string name="agregar">Agregar</string>
     <string name="eliminar">Eliminar</string>
+    <string name="warning_empty">Campos vacíos</string>
+    <string name="list_empty">Lista eliminada exitosamente</string>
 </resources>
