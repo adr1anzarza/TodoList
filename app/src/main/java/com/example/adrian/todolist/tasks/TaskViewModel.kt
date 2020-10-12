@@ -61,7 +61,7 @@ class TaskViewModel(val database: TaskDatabaseDAO,
 
     fun onStartTask() {
         uiScope.launch {
-            val newTask = Task("Titulo tarea", "Nueva descripción")
+            val newTask = Task("", "")
             insert(newTask)
             lastTask.value = getLastTaskFromDB()
             onTaskClicked(newTask.taskId)

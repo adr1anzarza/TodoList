@@ -14,9 +14,6 @@ import com.example.adrian.todolist.R
 import com.example.adrian.todolist.database.TaskDatabase
 import com.example.adrian.todolist.databinding.FragmentDetailTaskBinding
 
-/**
- * A simple [Fragment] subclass as the second destination in the navigation.
- */
 class TaskDetailFragment : Fragment() {
 
     override fun onCreateView(

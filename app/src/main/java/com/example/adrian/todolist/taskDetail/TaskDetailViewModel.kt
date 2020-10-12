@@ -1,5 +1,6 @@
 package com.example.adrian.todolist.taskDetail
 
+import android.text.Editable
 import androidx.databinding.Bindable
 import androidx.databinding.Observable
 import androidx.databinding.ObservableField
@@ -23,19 +24,45 @@ class TaskDetailViewModel(
 
     private var task: LiveData<Task>
 
+    var lastTask = MutableLiveData<Task?>()
+
     var title = MutableLiveData<String>()
+
+    @Bindable var taskTitleWord : String? = title.value
+        set(value) {
+            if (field != value) {
+                field = value
+            }
+        }
+
+    @Bindable var taskDescriptionWord : String? = title.value
+        set(value) {
+            if (field != value) {
+                field = value
+            }
+        }
 
     @Bindable
     fun getTask() = task
 
-    @Bindable
-    fun getTitleTask() : String? {
-        return task.value?.titleTask
-    }
-
     init {
         task = database.getTaskWithId(taskKey)
         title.value = task.value?.titleTask
+
+        initializeLastTask()
+    }
+
+    private fun initializeLastTask() {
+        uiScope.launch {
+            lastTask.value = getLastTaskFromDB()
+        }
+    }
+
+    private suspend fun getLastTaskFromDB(): Task? {
+        return withContext(Dispatchers.IO){
+            var task = database.getLastTask()
+            task
+        }
     }
 
     override fun onCleared() {
@@ -52,17 +79,27 @@ class TaskDetailViewModel(
         _navigateToTaskFragment.value = null
     }
 
-    fun onUpdateTask(quality: Int) {
+    fun onUpdateTask() {
         uiScope.launch {
             withContext(Dispatchers.IO) {
-                val lastTask = database.get(taskKey) ?: return@withContext
-                lastTask.titleTask = quality.toString()
-                lastTask.descriptionTask = quality.toString()
-                database.update(lastTask)
+                if(database.get(taskKey)==null){
+                    val lastTask = lastTask
+                    lastTask.value?.titleTask = taskTitleWord.toString()
+                    lastTask.value?.descriptionTask = taskDescriptionWord.toString()
+                    database.update(lastTask.value!!)
+                } else {
+                    val lastTask = database.get(taskKey) ?: return@withContext
+                    lastTask.titleTask = taskTitleWord.toString()
+                    lastTask.descriptionTask = taskDescriptionWord.toString()
+                    database.update(lastTask)
+                }
             }
             _navigateToTaskFragment.value = true
         }
     }
+
+
+
 
     override fun addOnPropertyChangedCallback(
         callback: Observable.OnPropertyChangedCallback) {
